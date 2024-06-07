@@ -26,6 +26,7 @@ async def index():
 
 @app.get('/vidsrc/{dbid}')
 async def vidsrc(dbid:str,s:int=None,e:int=None):
+    response.headers['Cache-Control'] = 'no-store'
     if dbid:
         return {
             "status":200,
