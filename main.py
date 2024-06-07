@@ -1,12 +1,7 @@
-"""
-file written by : cool-dev-guy
-based on ciarands vidsrc resolver's.
-This is an ASGI made using fastapi as a proof of concept and for educational uses.The writer/dev is not responsible for any isues caused by this project.
-"""
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware # CORS
+from fastapi import FastAPI, HTTPException, Response
+from fastapi.middleware.cors import CORSMiddleware
 import gzip
-from models import vidsrctoget,vidsrcmeget,info,fetch
+from models import vidsrctoget, vidsrcmeget, info, fetch
 from io import BytesIO
 from fastapi.responses import StreamingResponse
 
@@ -21,53 +16,55 @@ app.add_middleware(
 )
 
 @app.get('/')
-async def index():
+async def index(response: Response):
+    response.headers['Cache-Control'] = 'no-store'
     return await info()
 
 @app.get('/vidsrc/{dbid}')
-async def vidsrc(dbid:str,s:int=None,e:int=None):
+async def vidsrc(dbid: str, response: Response, s: int = None, e: int = None):
     response.headers['Cache-Control'] = 'no-store'
     if dbid:
         return {
-            "status":200,
-            "info":"success",
-            "sources":await vidsrctoget(dbid,s,e)
+            "status": 200,
+            "info": "success",
+            "sources": await vidsrctoget(dbid, s, e)
         }
     else:
         raise HTTPException(status_code=404, detail=f"Invalid id: {dbid}")
 
 @app.get('/vsrcme/{dbid}')
-async def vsrcme(dbid:str = '',s:int=None,e:int=None,l:str='eng'):
+async def vsrcme(dbid: str = '', response: Response, s: int = None, e: int = None, l: str = 'eng'):
+    response.headers['Cache-Control'] = 'no-store'
     if dbid:
         return {
-            "status":200,
-            "info":"success",
-            "sources":await vidsrcmeget(dbid,s,e)
+            "status": 200,
+            "info": "success",
+            "sources": await vidsrcmeget(dbid, s, e)
         }
     else:
         raise HTTPException(status_code=404, detail=f"Invalid id: {dbid}")
 
 @app.get('/streams/{dbid}')
-async def streams(dbid:str = '',s:int=None,e:int=None,l:str='eng'):
+async def streams(dbid: str = '', response: Response, s: int = None, e: int = None, l: str = 'eng'):
+    response.headers['Cache-Control'] = 'no-store'
     if dbid:
         return {
-            "status":200,
-            "info":"success",
-            "sources":await vidsrcmeget(dbid,s,e) + await vidsrctoget(dbid,s,e)
+            "status": 200,
+            "info": "success",
+            "sources": await vidsrcmeget(dbid, s, e) + await vidsrctoget(dbid, s, e)
         }
     else:
         raise HTTPException(status_code=404, detail=f"Invalid id: {dbid}")
-    
+
 @app.get("/subs")
-async def subs(url: str):
+async def subs(url: str, response: Response):
+    response.headers['Cache-Control'] = 'no-store'
     try:
-        response = await fetch(url)
-        with gzip.open(BytesIO(response.content), 'rt', encoding='utf-8') as f:
+        response_content = await fetch(url)
+        with gzip.open(BytesIO(response_content), 'rt', encoding='utf-8') as f:
             subtitle_content = f.read()
         async def generate():
             yield subtitle_content.encode("utf-8")
         return StreamingResponse(generate(), media_type="application/octet-stream", headers={"Content-Disposition": "attachment; filename=subtitle.srt"})
-
     except:
         raise HTTPException(status_code=500, detail=f"Error fetching subtitle")
-
