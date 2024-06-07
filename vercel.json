@@ -9,7 +9,10 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "main.py"
+      "dest": "main.py",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
     }
   ]
 }
