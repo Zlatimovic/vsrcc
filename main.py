@@ -33,7 +33,7 @@ async def vidsrc(dbid: str, response: Response, s: int = None, e: int = None):
         raise HTTPException(status_code=404, detail=f"Invalid id: {dbid}")
 
 @app.get('/vsrcme/{dbid}')
-async def vsrcme(dbid: str = '', response: Response, s: int = None, e: int = None, l: str = 'eng'):
+async def vsrcme(response: Response, dbid: str = '', s: int = None, e: int = None, l: str = 'eng'):
     response.headers['Cache-Control'] = 'no-store'
     if dbid:
         return {
@@ -45,7 +45,7 @@ async def vsrcme(dbid: str = '', response: Response, s: int = None, e: int = Non
         raise HTTPException(status_code=404, detail=f"Invalid id: {dbid}")
 
 @app.get('/streams/{dbid}')
-async def streams(dbid: str = '', response: Response, s: int = None, e: int = None, l: str = 'eng'):
+async def streams(response: Response, dbid: str = '', s: int = None, e: int = None, l: str = 'eng'):
     response.headers['Cache-Control'] = 'no-store'
     if dbid:
         return {
