@@ -11,12 +11,9 @@
     {
       "src": "/(.*)",
       "dest": "main.py",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
-      ]
+      "headers": {
+        "Cache-Control": "no-store"
+      }
     }
   ]
 }
