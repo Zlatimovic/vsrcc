@@ -4,7 +4,7 @@ from . import vidplay,filemoon
 from .utils import fetch,error,decode_url
 
 VIDSRC_KEY:str = "WXrUARXb1aDLaZjI"
-SOURCES:list = ['Vidplay','Filemoon']
+SOURCES:list = ['Vidplay','Filemoon', "F2Cloud"]
 
 async def get_source(source_id:str,SOURCE_NAME:str) -> str:
     api_request:str = await fetch(f"https://vidsrc.to/ajax/embed/source/{source_id}")
@@ -27,6 +27,9 @@ async def get_stream(source_url:str,SOURCE_NAME:str):
         return RESULT
     elif SOURCE_NAME==SOURCES[1]:
         RESULT['data'] = await filemoon.handle(source_url)
+        return RESULT
+    elif SOURCE_NAME==SOURCES[2]:
+        RESULT['data'] = await vidplay.handle(source_url)
         return RESULT
     else:
         return {"name":SOURCE_NAME,"source":'',"subtitle":[]}
