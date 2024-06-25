@@ -41,7 +41,7 @@ async def handle(url) -> dict:
 
     # DECODE SRC
     key_req        = await fetch('https://raw.githubusercontent.com/Ciarands/vidsrc-keys/main/keys.json')
-    key1,key2      = key_req.json()
+    key1, key2 = ["TfYZYXyc80Zu5Xm6", "lucACkUBOGieWdPc"]
     decoded_id     = await decode_data(key1, SRC_URL.split('/e/')[-1])
     encoded_result = await decode_data(key2, decoded_id)
     encoded_base64 = base64.b64encode(encoded_result)
