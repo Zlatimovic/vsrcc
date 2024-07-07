@@ -38,7 +38,7 @@ A simple web scrapper based on this [resolver](https://github.com/Ciarands).
     - #### _Vercel easy_
       Or if vercel fixes this bug,you can use this button.But vercel didnt fix this yet.
   
-      [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cool-dev-guy/vidsrc-api)
+      [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/joshholly/vidsrcme)
   
       `IMPORTANT `: Vercel is facing a bug recently so setting node version to `18.x` is a fix for it.
   
