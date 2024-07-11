@@ -3,6 +3,8 @@ from typing import Union
 from . import subtitle
 import re
 import base64
+from urllib.parse import quote
+
 async def decode_data(key: str, data: Union[bytearray, str]) -> bytearray:
     key_bytes = bytes(key, 'utf-8')
     s = bytearray(range(256))
@@ -48,12 +50,14 @@ async def handle(url) -> dict:
     key            = encoded_base64.decode('utf-8').replace('/', '_')
 
     # GET FUTOKEN
-    req = await fetch("https://vidplay.online/futoken", {"Referer": url})
+    req = await fetch("https://proxy.panel.mom/?destination=https://vidplay.online/futoken", {"Referer": url})
     fu_key = re.search(r"var\s+k\s*=\s*'([^']+)'", req.text).group(1)
     data = f"{fu_key},{','.join([str(ord(fu_key[i % len(fu_key)]) + ord(key[i])) for i in range(len(key))])}"
     
     # GET SRC
-    req = await fetch(f"https://vidplay.online/mediainfo/{data}?{SUB_URL}&autostart=true",headers={"Referer": url})
+    original_url = f"https://vidplay.online/mediainfo/{data}?{SUB_URL}&autostart=true"
+    encoded_url = quote(original_url, safe='')
+    req = await fetch(encoded_url,headers={"Referer": url})
     req_data = req.json()
 
     # RETURN IT
