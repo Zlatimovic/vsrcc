@@ -43,8 +43,8 @@ async def decode_url(encrypted_source_url:str,VIDSRC_KEY:str):
 async def fetch(url: str, headers: dict = {}, method: str = "GET", data=None, redirects: bool = True):
     # Correct the proxy settings by using full URL schemas for keys
     proxies = {
-        "http://": "http://136.226.65.114:10160",
-        "https://": "http://136.226.65.114:10160"
+        "http://": "http://167.102.133.111:80",
+        "https://": "http://167.102.133.111:80"
     }
     async with httpx.AsyncClient(follow_redirects=redirects, proxies=proxies, verify=False) as client:
         if method == "GET":
