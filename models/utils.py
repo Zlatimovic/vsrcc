@@ -40,18 +40,13 @@ async def decode_url(encrypted_source_url:str,VIDSRC_KEY:str):
     decoded_text = decoded.decode('utf-8')
     return unquote(decoded_text)
 
-async def fetch(url: str, headers: dict = {}, method: str = "GET", data=None, redirects: bool = True):
-    # Correct the proxy settings by using full URL schemas for keys
-    proxies = {
-        "http://": "http://zcdVzifUaeWxGCV:B4CLYyJNA3S6gvm@50.114.127.228:48811",
-        "https://": "http://zcdVzifUaeWxGCV:B4CLYyJNA3S6gvm@50.114.127.228:48811"
-    }
-    async with httpx.AsyncClient(follow_redirects=redirects, proxies=proxies, verify=False) as client:
-        if method == "GET":
-            response = await client.get(url, headers=headers)
+async def fetch(url:str,headers:dict={},method:str="GET",data=None,redirects:bool=True):
+    async with httpx.AsyncClient(follow_redirects=redirects) as client:
+        if method=="GET":
+            response = await client.get(url,headers=headers)
             return response
-        elif method == "POST":
-            response = await client.post(url, headers=headers, data=data)
+        if method=="POST":
+            response = await client.post(url,headers=headers,data=data)
             return response
         else:
             return "ERROR"
