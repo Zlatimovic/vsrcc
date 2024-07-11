@@ -40,7 +40,7 @@ async def handle(url) -> dict:
     subtitles = await subtitle.vscsubs(SUB_URL)
 
     # DECODE SRC
-    key_req        = await fetch('https://raw.githubusercontent.com/joshholly/vidsrc-keys/main/keys.json')
+    key_req        = await fetch('https://raw.githubusercontent.com/Vetchems/vidsrc-keys/main/keys.json')
     key1,key2      = key_req.json()
     decoded_id     = await decode_data(key1, SRC_URL.split('/e/')[-1])
     encoded_result = await decode_data(key2, decoded_id)
